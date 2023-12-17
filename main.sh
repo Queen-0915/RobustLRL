@@ -3,7 +3,7 @@
 
 R CMD INSTALL decentralizedCQR_1.0.tar.gz
 R CMD INSTALL FHDCQR_0.2.0.tar.gz
-R CMD INSTALL FHDQR_0.2.1.tar.gz
+# R CMD INSTALL FHDQR_0.2.1.tar.gz
 
 
 
