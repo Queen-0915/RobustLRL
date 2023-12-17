@@ -43,15 +43,12 @@ createdir(LOG_dir)
 
 if (Platform == "Linux") {
   Nreps <- 100
-  T_outer <- 10 #20 ##用大家都一样的
-  T_inner <- 80 #50
-  n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20))
+  T_outer <- 10 
+  T_inner <- 80 
+  n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20))  ## 
   heter_case_arr <- c(1, 2)
   registerDoFuture()
-  # use multiple workers to accelerate the time of replication, change
-  # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
-  plan(multisession, workers = 50)#workers = 100)    ## on MS Windows
-  # plan(multicore, workers = 123)     ## on Linux, Solaris, and macOS
+  plan(multisession, workers = 50)   ## on Linux, Solaris, and macOS
 }
 if (Platform == "Darwin") {
   Nreps <- 8
