@@ -18,7 +18,7 @@ All methods are implemented with R (Version 3.6.3) and conducted on a Linux serv
 
 # Install the package
 
-For installation, we recommend to unzip the `tar.gz` file first and then use `devtools::install()` to install the package, which can make sure to install all the depends. Make sure R package `tictoc`, `RcppArmadillo`, `igraph`, `pracma`, `Rcpp`, `MASS`, `ggplot2`, `ggpubr`, `doRNG`, `foreach`, `doFuture`, `parallel`, `xtable` have all been properly imported.
+For installation, we recommend to unzip the `tar.gz` file first and then use `devtools::install()` to install the package, which can make sure to install all the depends. Make sure R package `tictoc`, `RcppArmadillo`,`hqreg`, `igraph`, `pracma`, `Rcpp`, `MASS`, `ggplot2`, `ggpubr`, `doRNG`, `foreach`, `doFuture`, `parallel`, `xtable` have all been properly imported.
 
 
 #  The following shows how to get the simulation results 
