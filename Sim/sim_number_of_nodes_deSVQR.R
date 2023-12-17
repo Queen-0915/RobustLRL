@@ -5,12 +5,33 @@
 
 simulation_name <- "number_of_nodes_deSVQR"
 
+#' @param Nreps the independent replications
+#' @param T_outer the outer iteration
+#' @param T_inner the inner iteration
+#' @param n the local sample size
+#' @param m the number of machines
+#‘ @param N the whole sample size
+#‘ @param p the row dimension
+#‘ @param q the column dimension
+#‘ @param r the ture rank of generated matrix 
+#‘ @param pc the connection probability of the network
+#‘ @param tau the quatile level
+#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
+#' @param X the input p*q matrix 
+#' @param Y the response vector
+#' @param B the coefficient matrix
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param nlambda the length of tuning lambda
+#' @function  decentralizedCQR_cpp  Decentralized surrogate vector quantile regression (deSVQR)
+
+
 
 # ============================================================== #
 # LOAD LIBRARY
 # ============================================================== #
 
-library(FHDQR)
+# library(FHDQR)
 # library(FHDCQR)
 library(cqrReg)
 
@@ -47,21 +68,16 @@ if (Platform == "Linux") {
   T_outer <- 10
   T_inner <- 80
   noise_case_arr <- c("Normal", "T2", "Cauchy")
-  # noise_case_arr <- c("Cauchy")
   m_arr <- c(5, 10, 20)
-  # m_arr <- c(15)
   registerDoFuture()
   # use multiple workers to accelerate the time of replication, change
   # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
-  # plan(multisession, workers = 50)    ## on MS Windows
-  # plan(multicore, workers = 123)     ## on Linux, Solaris, and macOS
   plan(multisession, workers = 100)     ## on Linux, Solaris, and macOS
 }
 if (Platform == "Darwin") {
   Nreps <- 8
   T_outer <- 5
   T_inner <- 10
-  # noise_case_arr <- c("T2")
   noise_case_arr <- c("Cauchy")
   m_arr <- c(15)
   registerDoFuture()
@@ -73,33 +89,20 @@ if (Platform == "Darwin") {
 # PARAMETERS
 # ============================================================== #
 
-# m <- 10 # the number of machines
-# n <- 2e2 # local sample size
-# N <- m*n # sample size
-# N <- 4200
-# N <- 3000
-# N <- 4600
+
 N <- 6000
 p <- 10 # row dimension
 q <- 10 # column dimension
 r <- 3 # rank
-# pc <- .3 # the connection probability
 pc <- 1 # the connection probability
 tau = 1 / 2 # quatile level
 rho <- .1
 sigma2 <- 1
 ishomo <- T
-# c0 <- 0.04
-# c0 <- 0.013
 c0 <- 0.045
 tau_penalty_factor <- 1 / 6
-# tau_penalty_factor <- 0.05
-# tau_penalty_factor <- 0.1
-# tau_penalty_factor <- 0.05/4
-# tau_penalty_factor <- 0.05/6
 nlambda = 100
 lambda_factor <- 1e-3
-# lambda_factor = 1e-4
 lambda_max <- .1
 quiet = T
 MAXIT <- 2e3
@@ -129,11 +132,7 @@ for (inoise_case_arr in 1:length(noise_case_arr)) {
       # Load the parameter
       m <- m_arr[[im_arr]]
       n <- N/m
-      # c0 <- log(2000)/200*0.045/log(N)*n
       cat("n = ", n, "p = ", p, "q = ", q, "\n")
-
-      # RNGkind("L'Ecuyer-CMRG")
-      # .Random.seed <- attr(r, "rng")[[30]]
 
       # Generate data
       data <- gen_data(
@@ -167,16 +166,13 @@ for (inoise_case_arr in 1:length(noise_case_arr)) {
         A_init_CQR[, j] <-
           matrix(quantile(y[idx] - X[idx,] %*% B_init_CQR[, j], tau_K))
       }
-      # error_local <- computeError(B_init_CQR, betaT)
-      # f1_local <- mean(unlist(lapply(apply(B_init_CQR, 2, FUN = function(x) computeF1(which(abs(x)>0), suppT)), `[[`, 1)))
 
        # deSCQR
       if (hetercase == 2) {
-        tau_penalty_factor <- 0.05/2#0.05/6 #
-        # tau_penalty_factor <- 0.04/2
+        tau_penalty_factor <- 0.05/2 
       }
       if (hetercase == 1) {
-        tau_penalty_factor <- 0.1 #0.05/2#0.1
+        tau_penalty_factor <- 0.1  
       }
       out_beta_deSCQR <- decentralizedCQR_cpp(
         X = X,
@@ -204,8 +200,6 @@ for (inoise_case_arr in 1:length(noise_case_arr)) {
           FUN = function(x)
             compute_rank(matrix(x, sqrt(p), sqrt(p)), cutoff = 1e-1)
         ))
-        # mean(unlist(lapply(apply(out_beta_deSCQR$B, 2,
-        #                                      FUN = function(x) computeF1(which(abs(x)>0), suppT)), `[[`, 1)))
 
       output_list[[in_p_arr]] <- c( error_deSCQR,
                                     rank_deSCQR)
