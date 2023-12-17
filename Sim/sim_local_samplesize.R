@@ -68,50 +68,34 @@ if (Platform == "Linux") {
   # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
   plan(multisession, workers = 100)     ## on Linux, Solaris, and macOS
 }
-# if (Platform == "Darwin") {
-#   Nreps <- 8
-#   T_outer <- 1
-#   T_inner <- 10
-#   # noise_case_arr <- c("T2")
-#   noise_case_arr <- c("Cauchy")
-#   m_arr <- c(15)
-#   registerDoFuture()
-#   plan(multisession, workers = 8)    ## on MS Windows
-# }
+if (Platform == "Darwin") {
+   Nreps <- 8
+   T_outer <- 1
+   T_inner <- 10
+   noise_case_arr <- c("Cauchy")
+   n_arr <- c(30, 50, 80) 
+   registerDoFuture()
+   plan(multisession, workers = 8)    ## on MS Windows
+}
 
 
 # ============================================================== #
 # PARAMETERS
 # ============================================================== #
 
-# m <- 10 # the number of machines
-# n <- 2e2 # local sample size
-# N <- m*n # sample size
-# N <- 4200
-# N <- 3000
-# N <- 4600
 
-#n1 <- 30
 p <- 10 # row dimension
 q <- 10 # column dimension
 r <- 3 # rank
-# pc <- .3 # the connection probability
 pc <- 1 # the connection probability
 tau = 1 / 2 # quatile level
 rho <- .1
 sigma2 <- 1
 ishomo <- T
-# c0 <- 0.04
-# c0 <- 0.013
 c0 <- 0.045
 tau_penalty_factor <- 1 / 6
-# tau_penalty_factor <- 0.05
-# tau_penalty_factor <- 0.1
-# tau_penalty_factor <- 0.05/4
-# tau_penalty_factor <- 0.05/6
 nlambda = 100
 lambda_factor <- 1e-3
-# lambda_factor = 1e-4
 lambda_max <- .1
 quiet = T
 MAXIT <- 2e3
@@ -136,15 +120,13 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
 
     output_list <-
       vector(mode = "list", length = length(n_arr))
-    for (im_arr in 1:length(n_arr)) { #im_arr <- 1
+    for (im_arr in 1:length(n_arr)) {  #im_arr <- 1
       # Load the parameter
       n <- n_arr[[im_arr]]
       m <- 20
       N <- n * m
       cat("n = ", n, "p = ", p, "q = ", q, "\n")
 
-      # RNGkind("L'Ecuyer-CMRG")
-      # .Random.seed <- attr(r, "rng")[[30]]
 
       # Generate data
       data <- gen_data(
@@ -167,14 +149,12 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
       adjacency_matrix <- as.matrix(as_adjacency_matrix(graph))
 
       # Estimate
-
-
       # Local estimate by BIC
       B_init_local <- matrix(rnorm(p * q), p, q)
       B_init <- matrix(rep(NA, p * q * m), p * q, m)
       for (im in 1:m) {
         idx <- ((im - 1) * n + 1):(im * n)
-        out_local1 <- bic.quantile_trace_regression(
+        out_local1 <- bic.quantile_trace_regression( ## Local LS
           X[idx,],
           y[idx],
           tau = tau,
@@ -188,21 +168,8 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
       }
 
 
-      # ###last worker
-      # idx <- ((m - 1) * n + 1):N
-      # out_local <- bic.quantile_trace_regression(
-      #   X[idx,],
-      #   y[idx],
-      #   tau = tau,
-      #   nlambda = nlambda,
-      #   B_init = B_init_local,
-      #   B = B,
-      #   eps = eps,
-      #   MAXIT = MAXIT,
-      # )
-      # B_init[, m] <- c(out_local$B)
 
-      ### rank 估计 + local初始值
+      ### Local MQR: performs the nuclear-norm-penalized MQR on local data at each node 
       out_deMQR <- decentralizedTraceQR_cpp(
         X,
         y,
@@ -232,12 +199,9 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
             compute_rank(matrix(x, p, q), cutoff = 1e-1)
         ))
 
-      # # Avg estimate
-      # B_avg <- rowMeans(B_init)
-      # error_avg <- computeError(B_avg, betaT)
-      # rank_avg <- compute_rank(B_avg, cutoff = 1e-1)
+     
 
-      # deSubGD + out_deMQR
+      # Calculate deSubGD estimate
       out_deSubGD <-  deSubGD(X,
                               y,
                               d1 = p,
@@ -252,6 +216,8 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
                               quiet = quiet)
       B_deSubGD <- out_deSubGD$B
 
+      
+      ##  deSubGD as initial estimate
       out_deMQR2 <- decentralizedTraceQR_cpp(
         X,
         y,
@@ -281,7 +247,9 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
             compute_rank(matrix(x, p, q), cutoff = 1e-1)
         ))
 
-      # l2 + deMQR
+
+      
+      ### Local LS as initial estimate
       # Local estimate by BIC
       B_init_local <- matrix(rnorm(p * q), p, q)
       B_init_LS <- matrix(rep(NA, p * q * m), p * q, m)
@@ -329,7 +297,7 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
         ))
 
 
-      ##B+normal(0,0.1)
+      ## true coefficient matrix B^* + normal(0, 0.04^2) as initial estimate
       B_01 <- matrix(rep(NA, p * q * m), p * q, m)
       for (im in 1:m) {
         idx <- ((im - 1) * n + 1):(im * n)
@@ -369,7 +337,7 @@ for (inoise_case_arr in 1:length(noise_case_arr)) { #inoise_case_arr <- 1
 
 
 
-      ##B+normal(0,0.5)
+      #### true coefficient matrix B^* + normal(0, 0.08^2) as initial estimate
       B_05 <- matrix(rep(NA, p * q * m), p * q, m)
       for (im in 1:m) {
         idx <- ((im - 1) * n + 1):(im * n)
