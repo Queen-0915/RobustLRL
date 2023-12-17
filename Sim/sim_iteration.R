@@ -260,14 +260,6 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
     lty = 3,
     lwd = lwd
   )
-  # legend(
-  #   x = "topright",
-  #   c("20", "50", "100"),
-  #   lty = c(1, 2, 3),
-  #   pch = c(1, 2, 3),
-  #   col = c(1, 2, 3),
-  #   lwd = rep(lwd, 3)
-  # )
 
   par(op)
 
