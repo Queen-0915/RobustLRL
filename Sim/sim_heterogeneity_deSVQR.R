@@ -5,6 +5,24 @@
 simulation_name <- "heterogeneity_deSVQR"
 
 
+#' @param n the local sample size
+#' @param m the number of machines
+#‘ @param N the whole sample size
+#‘ @param p the row dimension
+#‘ @param q the column dimension
+#‘ @param r the ture rank of generated matrix 
+#‘ @param pc the connection probability of the network
+#‘ @param tau the quatile level
+#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
+#' @param X the input p*q matrix 
+#' @param Y the response vector
+#' @param B the coefficient matrix
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param nlambda the length of tuning lambda
+#' @function  decentralizedCQR_cpp  The Decentralized surrogate vector quantile regression (deSVQR) method
+
+
 # ============================================================== #
 # LOAD LIBRARY
 # ============================================================== #
@@ -91,7 +109,6 @@ result <- vector(mode = "list", length = length(heter_case_arr))
 # ============================================================== #
 # MAIN ROUNTINE
 # ============================================================== #
-n_methods <- 1 
 t_start <- tic()
 for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
   hetercase <- heter_case_arr[iheter_case_arr]
@@ -146,13 +163,13 @@ for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
           matrix(quantile(y[idx] - X[idx,] %*% B_init_CQR[, j], tau_K))
       }
     
-       # deSCQR
+       # The Decentralized surrogate vector quantile regression (deSVQR) method
       if (hetercase == 2) {
         tau_penalty_factor <- 0.05/2    
       }
       if (hetercase == 1) {
         tau_penalty_factor <- 0.1 
-      }
+      }     
       out_beta_deSCQR <- decentralizedCQR_cpp(
         X = X,
         y = y,
@@ -193,6 +210,7 @@ t_end <- toc(t_start)
 # ============================================================== #
 # OUPUT TABLE
 # ============================================================== #
+n_methods <- 1 
 output_table_error <- vector(mode = "list", length = length(result))
 output_table_rank <- vector(mode = "list", length = length(result))
 output_table <- vector(mode = "list", length = length(result))
