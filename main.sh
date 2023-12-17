@@ -14,5 +14,11 @@ Rscript Sim/sim_heterogeneity_deSVQR.R
 Rscript Sim/sim_number_of_nodes.R
 Rscript Sim/sim_number_of_nodes_deSVQR.R
 Rscript Sim/sim_probability_of_connection.R
-Rscript Sim/sim_lambda.RRscript Sim/sim_local_samplesize.R
-Rscript Sim/sim_localBIC.R
+Rscript Sim/sim_lambda.R
+Rscript Sim/sim_local_samplesize.R
+Rscript Sim/sim_localBIC.R
+
+
+
+
+
