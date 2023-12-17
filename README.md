@@ -21,7 +21,7 @@ All methods are implemented with R (Version 3.6.3) and conducted on a Linux serv
 For installation, we recommend to unzip the `tar.gz` file first and then use `devtools::install()` to install the package, which can make sure to install all the depends. Make sure R package `tictoc`, `RcppArmadillo`,`hqreg`, `igraph`, `pracma`, `Rcpp`, `MASS`, `ggplot2`, `ggpubr`, `doRNG`, `foreach`, `doFuture`, `parallel`, `xtable`, `glmnet`,`rqPen`, `ggpubr`,`doFuture` have all been properly imported.
 
 ```R
-libc_nod = c('MASS','pracma','igraph','tictoc','glmnet','ggplot2','ggpubr','doRNG','foreach','doFuture','parallel','xtable','rqPen','cqrReg','hqreg','decentralizedCQR')
+libc_nod = c('MASS','pracma','igraph','tictoc','glmnet','ggplot2','ggpubr','doRNG','foreach','doFuture','parallel','xtable','rqPen','cqrReg','hqreg')
 toinstall = libc_nod[!libc_nod %in% installed.packages()]
 install.packages(toinstall)
 ```
