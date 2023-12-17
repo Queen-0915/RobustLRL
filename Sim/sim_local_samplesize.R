@@ -3,8 +3,27 @@
 # Simulation: Effect of Initial Methods 
 # ============================================================== #
 
-
 simulation_name <- "number_of_samplesize"
+
+#' @param Nreps the independent replications
+#' @param T_outer the outer iteration
+#' @param T_inner the inner iteration
+#' @param n the local sample size
+#' @param m the number of machines
+#‘ @param N the whole sample size
+#‘ @param p the row dimension
+#‘ @param q the column dimension
+#‘ @param r the ture rank of generated matrix 
+#‘ @param pc the connection probability of the network
+#‘ @param tau the quatile level
+#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
+#' @param X the input p*q matrix 
+#' @param Y the response vector
+#' @param B the coefficient matrix
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param nlambda the length of tuning lambda
+#' @function decentralizedTraceQR_cpp  Our deSMQR method
 
 
 # ============================================================== #
@@ -42,15 +61,11 @@ if (Platform == "Linux") {
   Nreps <- 100
   T_outer <- 1 #outer
   T_inner <- 80
-  noise_case_arr <- c("Normal", "T2", "Cauchy") #"Cauchy"#
-  n_arr <- c(30, 50, 80) # 70,
-  #m_arr <- c(5, 10, 20)
-  # m_arr <- c(15)
+  noise_case_arr <- c("Normal", "T2", "Cauchy") 
+  n_arr <- c(30, 50, 80) 
   registerDoFuture()
   # use multiple workers to accelerate the time of replication, change
   # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
-  # plan(multisession, workers = 50)    ## on MS Windows
-  # plan(multicore, workers = 123)     ## on Linux, Solaris, and macOS
   plan(multisession, workers = 100)     ## on Linux, Solaris, and macOS
 }
 # if (Platform == "Darwin") {
