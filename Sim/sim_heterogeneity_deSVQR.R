@@ -10,7 +10,7 @@ simulation_name <- "heterogeneity_deSVQR"
 # ============================================================== #
 
 library(rqPen)
-library(FHDQR)
+# library(FHDQR)
 # library(FHDCQR)
 library(cqrReg)
 library(MASS)
@@ -68,26 +68,19 @@ if (Platform == "Darwin") {
 # ============================================================== #
 
 m <- 10 # the number of machines
-# n <- 2e2
-# N <- m * n
-# p <- 1e2
-#s <- 10
 r <- 3
 pc <- 0.3 # the connection probability
-K <- 1 #9 # the number of quantile levels #only 1
+K <- 1  # the number of quantile levels 
 tau_K <- seq(1, K) / (K + 1)
 rho <- .1
 sigma2 <- 1
 ishomo <- F
-# hetercase <- 1
-#c0 = 0.013 #原来的
 c0 <- 0.045
 
 nlambda <- 100L
-# lambda_factor <- 1e-4
 lambda_factor <- 1e-3
 
-# lambda_max <- 20
+
 lambda_max <- 0.1 #1
 quiet <- TRUE
 
@@ -96,15 +89,12 @@ MAXIT <- 2e3
 eps <- 1e-3
 result <- vector(mode = "list", length = length(heter_case_arr))
 
-# tau_penalty_factor <- 1 / 6
-# tau_penalty_factor <- 0.1
-# tau_penalty_factor <- 0.05/2
-# result <- vector(mode = "list", length = length(heter_case_arr))
+
 
 # ============================================================== #
 # MAIN ROUNTINE
 # ============================================================== #
-n_methods <- 1 #5
+n_methods <- 1 
 t_start <- tic()
 for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
   hetercase <- heter_case_arr[iheter_case_arr]
@@ -139,19 +129,8 @@ for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
         ishomo = F,
         hetercase = hetercase
       )
-      # decentralizedCQR::genData(
-      #   N,
-      #   m,
-      #   p,
-      #   s,
-      #   pc,
-      #   rho = .1,
-      #   sigma2 = 1,
-      #   type = "Cauchy",
-      #   ishomo = FALSE,
-      #   hetercase = hetercase
-      # )
-      X <- data$X; #dim(data$X)
+
+      X <- data$X;
       y <- data$y
       betaT <- c(data$B)
       suppT <- which(abs(betaT)>0) ##support set
@@ -169,16 +148,13 @@ for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
         A_init_CQR[, j] <-
           matrix(quantile(y[idx] - X[idx,] %*% B_init_CQR[, j], tau_K))
       }
-      # error_local <- computeError(B_init_CQR, betaT)
-      # f1_local <- mean(unlist(lapply(apply(B_init_CQR, 2, FUN = function(x) computeF1(which(abs(x)>0), suppT)), `[[`, 1)))
-
+    
        # deSCQR
       if (hetercase == 2) {
-        tau_penalty_factor <- 0.05/2#0.05/6 #
-        # tau_penalty_factor <- 0.04/2
+        tau_penalty_factor <- 0.05/2    
       }
       if (hetercase == 1) {
-        tau_penalty_factor <- 0.1 #0.05/2#0.1
+        tau_penalty_factor <- 0.1 
       }
       out_beta_deSCQR <- decentralizedCQR_cpp(
         X = X,
@@ -206,8 +182,6 @@ for (iheter_case_arr in 1:length(heter_case_arr)) { # iheter_case_arr <- 1
           FUN = function(x)
             compute_rank(matrix(x, sqrt(p), sqrt(p)), cutoff = 1e-1)
         ))
-        # mean(unlist(lapply(apply(out_beta_deSCQR$B, 2,
-        #                                      FUN = function(x) computeF1(which(abs(x)>0), suppT)), `[[`, 1)))
 
       output_list[[in_p_arr]] <- c( error_deSCQR,
                                     rank_deSCQR)
