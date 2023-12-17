@@ -4,7 +4,9 @@
 
 simulation_name <- "heterogeneity_deSVQR"
 
-
+#' @param Nreps the independent replications
+#' @param T_outer the outer iteration
+#' @param T_inner the inner iteration
 #' @param n the local sample size
 #' @param m the number of machines
 #‘ @param N the whole sample size
