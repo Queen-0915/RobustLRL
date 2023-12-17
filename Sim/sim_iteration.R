@@ -228,7 +228,7 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
     type = type,
     ylim = c(
       min(
-        log(rowMeans(do.call(cbind, r[[1]]))),
+        log(rowMeans(do.call(cbind, r[[1]]))), ### Using log-Y
         log(rowMeans(do.call(cbind, r[[2]]))),
         log(rowMeans(do.call(cbind, r[[3]]))),
         na.rm = T
