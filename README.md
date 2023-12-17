@@ -30,12 +30,12 @@ bash main.sh
 ```
 Note that please after installing the *RobustLRL* package, run the code again！
 
-  Figure  1 by sim_iteration.R
-  Table 1  by sim_heavy_tailed.R
-  Table 2  by sim_heterogeneity.R & sim_heterogeneity_deSVQR.R
-  Table 3  by sim_heterogeneity.R & sim_heterogeneity_deSVQR.R
-  Table 4  by sim_number_of_nodes.R & sim_number_of_nodes_deSVQR.R
-  Table 5  by sim_probability_of_connection.R
+  - Figure  1 by sim_iteration.R
+  - Table 1  by sim_heavy_tailed.R
+  - Table 2  by sim_heterogeneity.R & sim_heterogeneity_deSVQR.R
+  - Table 3  by sim_heterogeneity.R & sim_heterogeneity_deSVQR.R
+  - Table 4  by sim_number_of_nodes.R & sim_number_of_nodes_deSVQR.R
+  - Table 5  by sim_probability_of_connection.R
 
 In Supplementary Material:
 
