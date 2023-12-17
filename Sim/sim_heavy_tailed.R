@@ -1,3 +1,20 @@
+#' @param n the local sample size
+#' @param m the number of machines
+#‘ @param N the whole sample size
+#‘ @param p the row dimension
+#‘ @param q the column dimension
+#‘ @param r the ture rank of generated matrix 
+#‘ @param pc the connection probability of the network
+#‘ @param tau the quatile level
+#‘ @param tau the quatile level
+#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#‘ @param noise_type_arr different type of noise
+#' @param X the input p*q matrix 
+#' @param Y the response vector
+#' @param B the coefficient matrix
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param nlambda the length of tuning lambda
+
 # ============================================================== #
 # Simulation: Heavy_tailed
 # ============================================================== #
@@ -40,10 +57,7 @@ if (Platform == "Linux") {
   T_inner <- 80
   noise_type_arr <- c("Cauchy", "Normal", "T2")
   registerDoFuture()
-  # use multiple workers to accelerate the time of replication, change
-  # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
-  # plan(multisession, workers = 100)    ## on MS Windows
-  plan(multicore, workers = 50)     ## on Linux, Solaris, and macOS
+  plan(multisession, workers = 50)     ## on Linux, Solaris, and macOS
 }
 if (Platform == "Darwin") {
   Nreps <- 8
@@ -72,8 +86,6 @@ rho <- .1
 sigma2 <- 1
 ishomo <- T
 hetercase <- 1
-# c0 <- 0.04
-# c0 <- 0.013
 c0 <- 0.045
 tau_penalty_factor <- 1 / 6
 nlambda = 100
@@ -114,7 +126,7 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
         n <- n_p_arr[[in_p_arr]][1]
         p <- q <- n_p_arr[[in_p_arr]][[2]]
         N <- m * n
-        cat("n = ", n, "p = ", p, "q = ", q, "\n")
+        cat("n = ", n, "p = ", p, "q = ", q, "\n") 
 
         # Generate data
         # fix seed
