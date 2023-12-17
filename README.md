@@ -1,5 +1,5 @@
 
-***
+
 
 
 # RobustLRL: Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach
@@ -11,7 +11,7 @@ All files for reproducing the numerical results in the paper
 
 All methods are implemented with R (Version 3.6.3) and conducted on a Linux server with 64-core Intel(R) Xeon(R) Gold 256 CPU (2.0GHz) and 62.6 GB RAM. We implement the distributed algorithms in a fully synchronized distributed setting.
 
-% -------------------------------------------------------------------------
+***
 
 
 
