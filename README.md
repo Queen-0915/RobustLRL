@@ -43,8 +43,7 @@ In Supplementary Material:
   - Table H.1  by sim_local_samplesize.R
   - Table H.2  by sim_localBIC.R
 
-
-% -------------------------------------------------------------------------
+***
 
 This package is maintained by Canyi Chen. If you have any questions or find any buggs please contact [canyic@umich.edu]. 
 
