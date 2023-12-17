@@ -1,5 +1,5 @@
 Package: RobustLRL
-Title: What the Package Does (One Line, Title Case)
+Title: Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
