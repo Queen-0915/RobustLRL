@@ -1,4 +1,8 @@
+
+# ============================================================== #
 # Simulation: probability_of_connection
+# ============================================================== #
+
 simulation_name <- "probability_of_connection"
 
 
