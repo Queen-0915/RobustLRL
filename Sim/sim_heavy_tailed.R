@@ -1,3 +1,8 @@
+# ============================================================== #
+# Simulation: Heavy_tailed
+# ============================================================== #
+
+simulation_name <- "heavy_tailed"
 #' @param n the local sample size
 #' @param m the number of machines
 #‘ @param N the whole sample size
@@ -6,21 +11,14 @@
 #‘ @param r the ture rank of generated matrix 
 #‘ @param pc the connection probability of the network
 #‘ @param tau the quatile level
-#‘ @param tau the quatile level
 #‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
-#‘ @param noise_type_arr different type of noise
+#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
 #' @param X the input p*q matrix 
 #' @param Y the response vector
 #' @param B the coefficient matrix
 #' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
 #' @param nlambda the length of tuning lambda
 #' @function decentralizedTraceQR_cpp  Our deSMQR method
-
-# ============================================================== #
-# Simulation: Heavy_tailed
-# ============================================================== #
-
-simulation_name <- "heavy_tailed"
 
 
 # ============================================================== #
@@ -75,10 +73,6 @@ if (Platform == "Darwin") {
 # ============================================================== #
 
 m <- 10 # the number of machines
-# n <- 2e2 # local sample size
-# N <- m*n # sample size
-# p <- 10 # row dimension
-# q <- 10 # column dimension
 n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20))
 r <- 3 # rank
 pc <- .3 # the connection probability
@@ -91,7 +85,6 @@ c0 <- 0.045
 tau_penalty_factor <- 1 / 6
 nlambda = 100
 lambda_factor <- 1e-3
-# lambda_factor = 1e-4
 lambda_max <- .1
 quiet = T
 MAXIT <- 2e3
