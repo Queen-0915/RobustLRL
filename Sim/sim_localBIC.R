@@ -1,9 +1,28 @@
 # ============================================================== #
-# Simulation: LocalBIC V.S. Decentralized BIC
+# Simulation: Our deSMQR method with Local BIC 
 # ============================================================== #
 
 simulation_name <- "localBIC"
 
+#' @param Nreps the independent replications
+#' @param T_outer the outer iteration
+#' @param T_inner the inner iteration
+#' @param n the local sample size
+#' @param m the number of machines
+#‘ @param N the whole sample size
+#‘ @param p the row dimension
+#‘ @param q the column dimension
+#‘ @param r the ture rank of generated matrix 
+#‘ @param pc the connection probability of the network
+#‘ @param tau the quatile level
+#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
+#' @param X the input p*q matrix 
+#' @param Y the response vector
+#' @param B the coefficient matrix
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param nlambda the length of tuning lambda
+#' @function decentralizedTraceQR_local_cpp  Our deSMQR method with Local BIC 
 
 # ============================================================== #
 # LOAD LIBRARY
@@ -43,7 +62,6 @@ if (Platform == "Linux") {
   registerDoFuture()
   # use multiple workers to accelerate the time of replication, change
   # the number 123 to smaller number, e.g., 4 or 8 to accommodate your machine.
-  # plan(multisession, workers = 100)    ## on MS Windows
   plan(multisession, workers = 100)     ## on Linux, Solaris, and macOS
 }
 if (Platform == "Darwin") {
@@ -61,11 +79,7 @@ if (Platform == "Darwin") {
 # ============================================================== #
 
 m <- 10 # the number of machines
-# n <- 2e2 # local sample size
-# N <- m*n # sample size
-# p <- 10 # row dimension
-# q <- 10 # column dimension
-n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20))
+n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20)) ##(n, p) array
 r <- 3 # rank
 pc <- .3 # the connection probability
 tau <- 1 / 2 # quatile level
@@ -93,7 +107,7 @@ tic()
 for (inoise_type_arr in 1:length(noise_type_arr)) { # inoise_type_arr <- 1
   noise_type <- noise_type_arr[inoise_type_arr]
   cat("The noise distribution is ", noise_type, "\n")
-
+  
   set.seed(2022) # fix the seed
   r_out <- foreach(
     iNreps = 1:Nreps,
@@ -115,9 +129,6 @@ for (inoise_type_arr in 1:length(noise_type_arr)) { # inoise_type_arr <- 1
       cat("n = ", n, "p = ", p, "q = ", q, "\n")
 
       # Generate data
-      # fix seed
-      # RNGkind("L'Ecuyer-CMRG")
-      # .Random.seed <- attr(r0, "rng")[[98]]
       data <- gen_data(
         p = p,
         q = q,
@@ -139,10 +150,7 @@ for (inoise_type_arr in 1:length(noise_type_arr)) { # inoise_type_arr <- 1
       adjacency_matrix <- as.matrix(as_adjacency_matrix(graph))
 
       # Estimate
-
-
       # Initial
-      # MQR
       # Local estimate by BIC
       B_init_local <- matrix(rnorm(p * q), p, q)
       B_init <- matrix(rep(NA, p * q * m), p * q, m)
@@ -161,29 +169,9 @@ for (inoise_type_arr in 1:length(noise_type_arr)) { # inoise_type_arr <- 1
         )
         B_init[, im] <- c(out_local$B)
       }
-     # error_init <- computeError(B_init, betaT)
-
-      # # Trace Reg
-      # # Local estimate by BIC
-      # B_init_local <- matrix(rnorm(p * q), p, q)
-      # B_init_LS <- matrix(rep(NA, p * q * m), p * q, m)
-      # for (im in 1:m) {
-      #   idx <- ((im - 1) * n + 1):(im * n)
-      #   out_local <- bic.trace_regression(
-      #     X[idx,],
-      #     y[idx],
-      #     nlambda = nlambda,
-      #     B_init = B_init_local,
-      #     B = B,
-      #     eps = eps,
-      #     MAXIT = MAXIT,
-      #     quiet = F
-      #   )
-      #   B_init_LS[, im] <- c(out_local$B)
-      # }
-      # error_init_LS <- computeError(B_init_LS, betaT)
 
 
+###  Our deSMQR method with LocalBIC 
       out_deMQR <- decentralizedTraceQR_local_cpp(
         X,
         y,
@@ -213,45 +201,12 @@ for (inoise_type_arr in 1:length(noise_type_arr)) { # inoise_type_arr <- 1
             compute_rank(matrix(x, p, q), cutoff = 1e-1)
         ))
 
-      # out_deLR <- deTraceReg(
-      #   X,
-      #   y,
-      #   d1 = p,
-      #   d2 = q,
-      #   adjacency_matrix = adjacency_matrix,
-      #   B_init = B_init_LS,
-      #   betaT = betaT,
-      #   T_inner = T_inner * T_outer,
-      #   tau_penalty_factor = tau_penalty_factor,
-      #   nlambda = nlambda,
-      #   lambda_factor = lambda_factor,
-      #   lambda_max = lambda_max,
-      #   quiet = quiet
-      # )
-      # error_deLR <-
-      #   out_deLR$history$errors_inner[length(out_deLR$history$errors_inner)]
-      # rank_deLR <-
-      #   mean(apply(
-      #     out_deLR$B,
-      #     2,
-      #     FUN = function(x)
-      #       compute_rank(matrix(x, p, q), cutoff = 1e-1)
-      #   ))
-
 
       output_list[[in_p_arr]] <- c(error_deMQR, rank_deMQR)
     }
     output_list
   }
   result[[inoise_type_arr]] <- r_out
-
-  # output table
-  # output_table <- vector(mode = "list", length = 1)
-  # r0 <- result[[inoise_type_arr]]
-  # output_table[[1]] <-
-  #   t(sapply(r0, function(x)
-  #     rowMeans(do.call(cbind, x), na.rm = T)))
-  # xtable(do.call(rbind, output_table), digits = 4)
 
 }
 toc()
