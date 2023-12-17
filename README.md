@@ -39,9 +39,9 @@ Note that please after installing the *RobustLRL* package, run the code again！
 
 In Supplementary Material:
 
-  Figure H.1 by sim_lambda.R
-  Table H.1  by sim_local_samplesize.R
-  Table H.2  by sim_localBIC.R
+  - Figure H.1 by sim_lambda.R
+  - Table H.1  by sim_local_samplesize.R
+  - Table H.2  by sim_localBIC.R
 
 
 % -------------------------------------------------------------------------
