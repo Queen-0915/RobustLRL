@@ -14,6 +14,7 @@
 #' @param B the coefficient matrix
 #' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
 #' @param nlambda the length of tuning lambda
+#' @function decentralizedTraceQR_cpp  Our deSMQR method
 
 # ============================================================== #
 # Simulation: Heavy_tailed
@@ -153,8 +154,6 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
         adjacency_matrix <- as.matrix(as_adjacency_matrix(graph))
 
         # Estimate
-
-
         # Initial
         # MQR
         # Local estimate by BIC
@@ -197,7 +196,7 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
         }
         error_init_LS <- computeError(B_init_LS, betaT)
 
-
+      #####Our deSMQR method
         out_deMQR <- decentralizedTraceQR_cpp(
           X,
           y,
