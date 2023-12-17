@@ -2,7 +2,7 @@
 % -------------------------------------------------------------------------
 
 
-#RobustLRL: Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach
+# RobustLRL: Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach
 
 *RobustLRL* is an R package for Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach. 
 
