@@ -1,0 +1,21 @@
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+// [[Rcpp::export]]
+arma::cube timesTwo(arma::cube &x) {
+  int p = x.n_rows, q = x.n_cols;
+  arma::mat b(p, q);
+  //arma::vec out = x.each_slice([&](arma::mat &X) {return arma::trace(X.t()*b);});
+  return x;
+}
+
+
+// You can include R code blocks in C++ files processed with sourceCpp
+// (useful for testing and development). The R code will be automatically
+// run after the compilation.
+//
+
+/*** R
+data <- array(rnorm(24), dim = 2:4)
+timesTwo(data)
+*/
