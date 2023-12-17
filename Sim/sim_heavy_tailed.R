@@ -196,7 +196,7 @@ for (inoise_type_arr in 1:length(noise_type_arr)) {
         }
         error_init_LS <- computeError(B_init_LS, betaT)
 
-      #####Our deSMQR method
+      # Our deSMQR method
         out_deMQR <- decentralizedTraceQR_cpp(
           X,
           y,
