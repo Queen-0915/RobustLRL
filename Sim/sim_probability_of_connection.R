@@ -10,14 +10,14 @@ simulation_name <- "probability_of_connection"
 #' @param T_inner the inner iteration
 #' @param n the local sample size
 #' @param m the number of machines
-#‘ @param N the whole sample size
-#‘ @param p the row dimension
-#‘ @param q the column dimension
-#‘ @param r the ture rank of generated matrix 
-#‘ @param pc the connection probability of the network
-#‘ @param tau the quatile level
-#‘ @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
-#‘ @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
+#' @param N the whole sample size
+#' @param p the row dimension
+#' @param q the column dimension
+#' @param r the ture rank of generated matrix
+#' @param pc the connection probability of the network
+#' @param tau the quatile level
+#' @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
+#' @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
 #' @param X the input p*q matrix 
 #' @param Y the response vector
 #' @param B the coefficient matrix
