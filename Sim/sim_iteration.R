@@ -83,7 +83,6 @@ r <- 3 # rank
 pc <- .3 # the connection probability
 tau <- 1 / 2 # quatile level
 rho <- .1
-# sigma2 <- 1
 sigma2 <- 1
 ishomo <- T
 hetercase <- 1
