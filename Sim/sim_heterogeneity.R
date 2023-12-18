@@ -61,7 +61,6 @@ if (Platform == "Linux") {
   T_outer <- 10
   T_inner <- 80
   n_p_arr <- list(c(100, 10), c(200, 10), c(200, 20))
-  # heter_case_arr <- c(2)
   heter_case_arr <- c(1, 2)
   registerDoFuture()
   # use multiple workers to accelerate the time of replication, change
