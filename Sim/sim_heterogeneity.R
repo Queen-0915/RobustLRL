@@ -91,13 +91,9 @@ rho <- .1
 sigma2 <- 1
 ishomo <- F
 hetercase <- 1
-# c0 <- 0.04
-# c0 <- 0.013
 c0 <- 0.045
-# tau_penalty_factor <- 1 / 6
 nlambda = 100
 lambda_factor <- 1e-3
-# lambda_factor = 1e-4
 lambda_max <- .1
 quiet = T
 MAXIT <- 2e3
