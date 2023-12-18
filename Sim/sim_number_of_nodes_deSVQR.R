@@ -10,8 +10,6 @@ simulation_name <- "number_of_nodes_deSVQR"
 #' @param T_inner the inner iteration
 #' @param n the local sample size
 #' @param m the number of machines
-#' @param n the local sample size
-#' @param m the number of machines
 #' @param N the whole sample size
 #' @param p the row dimension
 #' @param q the column dimension
