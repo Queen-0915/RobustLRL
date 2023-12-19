@@ -115,7 +115,7 @@ result <- vector(mode = "list", length = length(noise_case_arr))
 # ============================================================== #
 # MAIN ROUNTINE
 # ============================================================== #
-n_methods <- 4
+
 t_start <- tic()
 for (inoise_case_arr in 1:length(noise_case_arr)) {
   noise_case <- noise_case_arr[inoise_case_arr]
