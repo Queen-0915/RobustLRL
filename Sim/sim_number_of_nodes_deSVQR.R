@@ -18,10 +18,10 @@ simulation_name <- "number_of_nodes_deSVQR"
 #' @param tau the quatile level
 #' @param hetercase  hetercase = 1: data generation follows the setting in Section 4.4; hetercase = 2: data generation follows the setting in Section 4.1.
 #' @param noise_type_arr different type of noise: Cauchy, Normal, Student's t(2)
-#' @param X the input p*q matrix 
+#' @param X the input p*q matrix
 #' @param Y the response vector
 #' @param B the coefficient matrix
-#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian 
+#' @param tau_penalty_factor the penalty parameter in the augmented Lagrangian
 #' @param nlambda the length of tuning lambda
 #' @function  decentralizedCQR_cpp  Decentralized surrogate vector quantile regression (deSVQR)
 
@@ -95,7 +95,9 @@ p <- 10 # row dimension
 q <- 10 # column dimension
 r <- 3 # rank
 pc <- 1 # the connection probability
-tau = 1 / 2 # quatile level
+K <- 1  # the number of quantile levels
+tau_K <- seq(1, K) / (K + 1)  # quatile level
+#tau = 1 / 2
 rho <- .1
 sigma2 <- 1
 ishomo <- T
@@ -167,12 +169,12 @@ for (inoise_case_arr in 1:length(noise_case_arr)) {
           matrix(quantile(y[idx] - X[idx,] %*% B_init_CQR[, j], tau_K))
       }
 
-       # deSCQR
+      # deSCQR
       if (hetercase == 2) {
-        tau_penalty_factor <- 0.05/2 
+        tau_penalty_factor <- 0.05/2
       }
       if (hetercase == 1) {
-        tau_penalty_factor <- 0.1  
+        tau_penalty_factor <- 0.1
       }
       out_beta_deSCQR <- decentralizedCQR_cpp(
         X = X,
