@@ -6,8 +6,7 @@
 
 *RobustLRL* is an R package for Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach. 
 
-All files for reproducing the numerical results in the paper 
-"Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach" are relegated to simulations subdirectory. We assume the root folder is the same folder the README.md resides in. 
+All files for reproducing the numerical results in the paper "Fast and Robust Low-Rank Learning over Networks: A Decentralized Matrix Quantile Regression Approach" is relegated to the simulations subdirectory. We assume the root folder is the same folder the README.md resides in. 
 
 All methods are implemented with R (Version 3.6.3) and conducted on a Linux server with 64-core Intel(R) Xeon(R) Gold 256 CPU (2.0GHz) and 62.6 GB RAM. We implement the distributed algorithms in a fully synchronized distributed setting.
 
@@ -18,7 +17,7 @@ All methods are implemented with R (Version 3.6.3) and conducted on a Linux serv
 
 # Install the package
 
-For installation, we recommend to unzip the `tar.gz` file first and then use `devtools::install()` to install the package, which can make sure to install all the depends. Make sure R package `tictoc`, `RcppArmadillo`,`hqreg`, `igraph`, `pracma`, `Rcpp`, `MASS`, `ggplot2`, `ggpubr`, `doRNG`, `foreach`, `doFuture`, `parallel`, `xtable`, `glmnet`,`rqPen`, `ggpubr`,`doFuture` have all been properly imported.
+For installation, we recommend unzipping the `tar.gz` file first and then using `devtools::install()` to install the package, which can make sure to install all the depends. Make sure R package `tictoc`, `RcppArmadillo`,`hqreg`, `igraph`, `pracma`, `Rcpp`, `MASS`, `ggplot2`, `ggpubr`, `doRNG`, `foreach`, `doFuture`, `parallel`, `xtable`, `glmnet`,`rqPen`, `ggpubr`,`doFuture` have all been properly imported.
 
 ```R
 libc_nod = c('MASS','pracma','igraph','tictoc','glmnet','ggplot2','ggpubr','doRNG','foreach','doFuture','parallel','xtable','rqPen','cqrReg','hqreg')
@@ -51,7 +50,7 @@ In Supplementary Material:
 
 ***
 
-This package is maintained by Canyi Chen. If you have any questions or find any buggs please contact [canyic@umich.edu, qiaonan0915@ruc.edu.cn]. 
+This package is maintained by Canyi Chen. If you have any questions or find any bugs please contact [canyic@umich.edu, qiaonan0915@ruc.edu.cn]. 
 
 Thank you.
 
