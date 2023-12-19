@@ -51,7 +51,7 @@ In Supplementary Material:
 
 ***
 
-This package is maintained by Canyi Chen. If you have any questions or find any buggs please contact [canyic@umich.edu]. 
+This package is maintained by Canyi Chen. If you have any questions or find any buggs please contact [canyic@umich.edu, qiaonan0915@ruc.edu.cn]. 
 
 Thank you.
 
