@@ -231,7 +231,7 @@ for(iheter_case_arr in seq_along(heter_case_arr)) {
 }
 xtable(do.call(rbind, output_table_error), digits = 4)
 
-xtable(do.call(rbind, output_table_f1), digits = 4)
+xtable(do.call(rbind, output_table_rank), digits = 4)
 
 xtable(do.call(rbind, output_table), digits = 4)
 # ============================================================== #
@@ -244,7 +244,7 @@ save.image(file = paste0(
   simulation_name,
   "_",
   format(Sys.time(), "%Y%m%d%H%M%S"),
-  "2.RData"
+  ".RData"
 ))
 
 
